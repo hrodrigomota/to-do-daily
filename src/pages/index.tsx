@@ -21,16 +21,27 @@ export default function Home() {
   const [modalId, setModalId] = useState<string>("");
   const [editedActivity, setEditedActivity] = useState<string>("");
   const [darkTheme, setDarkTheme] = useState<boolean>(false);
-
+  
   useEffect(() => {
     setActivityList(() => {
       const storedActivities = localStorage.getItem("activities");
       if (!storedActivities) return [];
       return JSON.parse(storedActivities);
     });
+
+    setDarkTheme(() => {
+      const storedTheme = localStorage.getItem("theme");
+      if(!storedTheme) return false
+      return JSON.parse(storedTheme)
+    })
   }, []);
 
-  function handleClick() {
+  function toggleTheme() {
+    setDarkTheme((prevState) => !prevState)
+    localStorage.setItem("theme", JSON.stringify(!darkTheme))
+  }
+
+  function handleAddActivityClick() {
     if (activity == "") {
       alert("Digite uma atividade no campo indicado");
       return;
@@ -48,6 +59,20 @@ export default function Home() {
       return newState;
     });
     setActivity("");
+  }
+
+  function toggleActivityStatus(id: string) {
+    setActivityList((prevState) => {
+      const newState = prevState.map((activity) => {
+        if (activity.id !== id) {
+          return activity;
+        } else {
+          return { ...activity, done: !activity.done };
+        }
+      });
+      localStorage.setItem("activities", JSON.stringify(newState));
+      return newState;
+    });
   }
 
   function saveChange() {
@@ -107,7 +132,7 @@ export default function Home() {
             Data: {new Date().toLocaleDateString("pt-br")}
           </h2>
           <ReactSwitch
-            onChange={() => setDarkTheme(!darkTheme)}
+            onChange={toggleTheme}
             checked={darkTheme}
             onColor="#9333ea"
             offColor="#000000"
@@ -120,7 +145,7 @@ export default function Home() {
           <div className="flex flex-col w-full gap-2 sm:flex-row sm:justify-between sm:gap-5 py-5 mb-6 ">
             <input
               type="text"
-              maxLength={30}
+              maxLength={35}
               placeholder="Digite aqui a sua atividade..."
               onChange={(event) => setActivity(event.target.value)}
               value={activity}
@@ -128,7 +153,7 @@ export default function Home() {
                 darkTheme ? "bg-zinc-900 text-white" : "bg-inherit text-inherit"
               }`}
             />
-            <Button title="Adicionar" theme={darkTheme} onClick={handleClick} />
+            <Button title="Adicionar" theme={darkTheme} onClick={handleAddActivityClick} />
           </div>
           {activityList.map((activity) => (
             <ActivityDescription
@@ -141,6 +166,8 @@ export default function Home() {
                 setModalId(() => activity.id);
               }}
               removeActivity={removeActivity}
+              value={activity.done}
+              toggleStatus={() => toggleActivityStatus(activity.id)}
             />
           ))}
         </Wrapper>
