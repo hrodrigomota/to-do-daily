@@ -21,7 +21,7 @@ export default function Home() {
   const [modalId, setModalId] = useState<string>("");
   const [editedActivity, setEditedActivity] = useState<string>("");
   const [darkTheme, setDarkTheme] = useState<boolean>(false);
-  
+
   useEffect(() => {
     setActivityList(() => {
       const storedActivities = localStorage.getItem("activities");
@@ -31,14 +31,14 @@ export default function Home() {
 
     setDarkTheme(() => {
       const storedTheme = localStorage.getItem("theme");
-      if(!storedTheme) return false
-      return JSON.parse(storedTheme)
-    })
+      if (!storedTheme) return false;
+      return JSON.parse(storedTheme);
+    });
   }, []);
 
   function toggleTheme() {
-    setDarkTheme((prevState) => !prevState)
-    localStorage.setItem("theme", JSON.stringify(!darkTheme))
+    setDarkTheme((prevState) => !prevState);
+    localStorage.setItem("theme", JSON.stringify(!darkTheme));
   }
 
   function handleAddActivityClick() {
@@ -145,15 +145,18 @@ export default function Home() {
           <div className="flex flex-col w-full gap-2 sm:flex-row sm:justify-between sm:gap-5 py-5 mb-6 ">
             <input
               type="text"
-              maxLength={35}
               placeholder="Digite aqui a sua atividade..."
               onChange={(event) => setActivity(event.target.value)}
               value={activity}
-              className={`w-full sm:w-5/6 border rounded-lg px-3 py-2 outline-none focus:border-purple-600 ${
+              className={`break-words break-all w-full sm:w-5/6 border rounded-lg px-3 py-2 outline-none focus:border-purple-600 ${
                 darkTheme ? "bg-zinc-900 text-white" : "bg-inherit text-inherit"
               }`}
             />
-            <Button title="Adicionar" theme={darkTheme} onClick={handleAddActivityClick} />
+            <Button
+              title="Adicionar"
+              theme={darkTheme}
+              onClick={handleAddActivityClick}
+            />
           </div>
           {activityList.map((activity) => (
             <ActivityDescription
