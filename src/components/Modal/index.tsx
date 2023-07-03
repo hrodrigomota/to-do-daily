@@ -56,7 +56,6 @@ export function Modal({
                 theme ? "bg-zinc-900" : "bg-inherit"
               }`}
               type="text"
-              maxLength={30}
               id="editedActivity"
               placeholder="ex.: Estudar React"
             />

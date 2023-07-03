@@ -114,7 +114,7 @@ export default function Home() {
         />
       </Head>
       <div
-        className={`flex flex-col items-center h-screen text-sm sm:text-base ${
+        className={`flex flex-col items-center min-h-screen text-sm sm:text-base ${
           darkTheme ? "bg-black" : "bg-inherit"
         }`}
       >
